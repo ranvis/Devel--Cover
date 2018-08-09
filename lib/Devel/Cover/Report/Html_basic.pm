@@ -156,10 +156,12 @@ sub _highlight_perltidy {
             : sub {};
 
 sub print_file {
+    my ($options) = @_;
     my @lines;
     my $f = $R{db}->cover->file($R{file});
 
     open F, $R{file} or warn("Unable to open $R{file}: $!\n"), return;
+    binmode(F, ':utf8') if ($options->{option}{utf8});
     my @all_lines = <F>;
 
     @all_lines = _highlight(@all_lines) if $Have_highlighter;
@@ -374,6 +376,7 @@ sub get_options {
                    qw(
                        outputfile=s
                        restrict!
+                       utf8!
                      ));
 }
 
@@ -433,7 +436,7 @@ sub report {
         $R{file_link} = "$R{filenames}{$_}.html";
         $R{file_html} = "$options->{outputdir}/$R{file_link}";
         my $show = $options->{show};
-        print_file;
+        print_file($options);
         print_branches    if $show->{branch};
         print_conditions  if $show->{condition};
         print_subroutines if $show->{subroutine} || $show->{pod};

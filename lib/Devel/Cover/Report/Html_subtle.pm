@@ -23,6 +23,7 @@ sub get_options {
         GetOptions($opt->{option},
                    qw(
                        outputfile=s
+                       utf8!
                      ));
 }
 
@@ -149,6 +150,7 @@ sub print_file {
     my ($db, $file, $options) = @_;
 
     open(F,'<',  $file) or warn("Unable to open '$file' [$!]\n"), return;
+    binmode(F, ':utf8') if ($options->{option}{utf8});
 
     my @lines;
     my @showing = grep $options->{show}{$_}, $db->criteria;

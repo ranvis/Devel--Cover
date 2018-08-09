@@ -477,6 +477,7 @@ sub print_file_report {
 
     my $fout = "$opt->{outputdir}/$Filenames{$fin}.html";
     open(my $in,  '<', $fin ) or warn("Can't read file '$fin' [$!]\n"), return;
+    binmode($in, ':utf8') if ($opt->{option}{utf8});
     open(my $out, '>', $fout) or warn("Can't open file '$fout' [$!]\n"), return;
 
     my ($show, $th) = get_showing_headers($db, $opt);
@@ -717,6 +718,7 @@ sub get_options {
                        pod!
                        summarytitle=s
                        unified!
+                       utf8!
                        report_c0=s
                        report_c1=s
                        report_c2=s
